@@ -30,7 +30,7 @@ command_exists() {
   fi
 }
 
-for COMMAND in "openstack" "dmidecode" "tr" "swaks"; do
+for COMMAND in "openstack" "tr" "swaks"; do
   command_exists "${COMMAND}"
 done
 
