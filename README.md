@@ -13,27 +13,27 @@ The script requires to have the command line tools dmidecode, wget & python-pip
 
 ```
 # Ubuntu/Debian
-apt-get install dmidecode wget python-pip
-# CentOS
-yum install dmidecode wget python-pip
-```
-
-Recent Ubuntu/Debian releases have the OpenStack command line tools packaged
-
-```
-apt-get install python-keystoneclient python-glanceclient python-novaclient
+apt-get install python-openstackclient
+# CentOS/RHEL
+yum install python2-openstackclient
 ```
 
 ### Mail agent
-To send the errors at the end of the script you need a message transfer agent on your unix server
-On Debian you can try exim4 (please find the configuration of that package : http://www.deltasight.fr/utiliser-ovh-smarthost-exim4/)
+To send the errors at the end of the script you need swaks (http://www.jetmore.org/john/code/swaks/)
+
+```
+# Ubuntu/Debian
+apt-get install swaks
+# CentOS/RHEL
+yum install swaks
+```
 
 ## Configuration
 ### Credentials file
 Firstable you need to create the file :
 
 ```
-nano /root/.openstack_snapshotrc
+nano .openstack_snapshotrc
 
 export OS_AUTH_URL="https://identity.stack.cloudvps.com/v2.0"
 export OS_TENANT_NAME="PROJECT_UUID"
@@ -41,15 +41,23 @@ export OS_TENANT_ID="PROJECT_UUID"
 export OS_USERNAME="USERNAME"
 export OS_PASSWORD="PASSWORD"
 export OS_REGION_NAME="REGION"
-export LOG_EMAIL_FROM="FROM"
-export LOG_EMAIL_TO="TO"
+
+export LOG_EMAIL_FROM="backup@domain.com"
+export LOG_EMAIL_TO="admin@domain.com"
+export LOG_SMTP_HOST=smtp.domain.com
+export LOG_SMTP_PORT=587
+export LOG_SMTP_TLS="-tls"
+export LOG_SMTP_AUTH_TYPE=PLAIN
+export LOG_SMTP_AUTH_USER="user@domain.com"
+export LOG_SMTP_AUTH_PWD="secret"
+
 ```
 Please note that the last line `OS_REGION_NAME` is needed for **OVH Cloud**
 
 Then you need to source it to apply the credentials :
 
 ```
-source /root/.openstack_snapshotrc
+source .openstack_snapshotrc
 ```
 
 ### Install the scripts
@@ -59,8 +67,8 @@ For example in your /home/user/ directory you can paste the `create_snapshot.sh`
 or use the following commands:
 
 ```
-wget -q -O - https://raw.githubusercontent.com/Nexenture/openstack-instances-backups/master/create_snapshot.sh > create_snapshot.sh
-wget -q -O - https://raw.githubusercontent.com/Nexenture/openstack-instances-backups/master/count_volume_snapshots.sh > count_volume_snapshots.sh
+wget -q -O - https://raw.githubusercontent.com/aellert/openstack-instances-backups/master/create_snapshot.sh > create_snapshot.sh
+wget -q -O - https://raw.githubusercontent.com/aellert/openstack-instances-backups/master/count_volume_snapshots.sh > count_volume_snapshots.sh
 ```
 
 Then you need to set the executable permission on the files :
